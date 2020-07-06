@@ -73,48 +73,48 @@ app.get("/sum", (req, res) => {
   res.send(result);
 });
 
-app.get("/cipher", (req, res) => {
-  const text = req.query.text;
-  const shift = req.query.shift;
+// app.get("/cipher", (req, res) => {
+//   const text = req.query.text;
+//   const shift = req.query.shift;
 
-  if (!text) {
-    return res.status(400).send("text is required");
-  }
+//   if (!text) {
+//     return res.status(400).send("text is required");
+//   }
 
-  if (!shift) {
-    return res.status(400).send("shift is required");
-  }
+//   if (!shift) {
+//     return res.status(400).send("shift is required");
+//   }
 
-  const numShift = parseFloat(shift);
+//   const numShift = parseFloat(shift);
 
-  if (Number.isNaN(numShift)) {
-    return res.status(400).send("shift must be a number");
-  }
+//   if (Number.isNaN(numShift)) {
+//     return res.status(400).send("shift must be a number");
+//   }
 
-  const base = "A".charCodeAt(0);
+//   const base = "A".charCodeAt(0);
 
-  const cipher = text
-    .toUpperCase()
-    .split("")
-    .map(char => {
-      const code = char.charCodeAt(0);
+//   const cipher = text
+//     .toUpperCase()
+//     .split("")
+//     .map((char) => {
+//       const code = char.charCodeAt(0);
 
-      if (code < base || code > base + 26) {
-        return char;
-      }
+//       if (code < base || code > base + 26) {
+//         return char;
+//       }
 
-      let diff = code - base;
-      diff = diff + numShift;
+//       let diff = code - base;
+//       diff = diff + numShift;
 
-      diff = diff % 26;
+//       diff = diff % 26;
 
-      const shiftedChar = String.fromCharCode(base + diff);
-      return shiftedChar;
-    })
-    .join("");
+//       const shiftedChar = String.fromCharCode(base + diff);
+//       return shiftedChar;
+//     })
+//     .join("");
 
-  res.status(200).send(cipher);
-});
+//   res.status(200).send(cipher);
+// });
 
 app.get("/lotto", (req, res) => {
   const numbers = req.query.numbers;
@@ -128,8 +128,8 @@ app.get("/lotto", (req, res) => {
   }
 
   const guesses = numbers
-    .map(n => parseInt(n))
-    .filter(n => !Number.isNaN(n) && n >= 1 && n <= 20);
+    .map((n) => parseInt(n))
+    .filter((n) => !Number.isNaN(n) && n >= 1 && n <= 20);
 
   if (guesses.length != 6) {
     return res
@@ -149,7 +149,7 @@ app.get("/lotto", (req, res) => {
     stockNumbers.splice(ran, 1);
   }
 
-  let diff = winningNumbers.filter(n => !guesses.includes(n));
+  let diff = winningNumbers.filter((n) => !guesses.includes(n));
 
   let responseText;
 
@@ -168,4 +168,80 @@ app.get("/lotto", (req, res) => {
   }
 
   res.send(responseText);
+});
+
+app.get("/hello", (req, res) => {
+  res.status(204).end();
+});
+
+app.get("/video", (req, res) => {
+  const video = {
+    title: "Cats falling over",
+    description: "15 minutes of hilarious fun as cats fall over",
+    length: "15.40",
+  };
+  res.json(video);
+});
+
+app.get("/colors", (req, res) => {
+  const colors = [
+    {
+      name: "red",
+      rgb: "FF0000",
+    },
+    {
+      name: "green",
+      rgb: "00FF00",
+    },
+    {
+      name: "blue",
+      rgb: "0000FF",
+    },
+  ];
+  res.json(colors);
+});
+
+app.get("/cipher", (req, res) => {
+  const text = "B";
+  const shift = 2;
+
+  if (!text) {
+    return res.status(400).send("text is required");
+  }
+
+  if (!shift) {
+    return res.status(400).send("shift is required");
+  }
+
+  if (typeof text !== "string") {
+    return res.status(400).send("text must be a string");
+  }
+
+  const numShift = parseFloat(shift);
+
+  if (Number.isNaN(numShift)) {
+    return res.status(400).send("shift must be a number");
+  }
+
+  const base = "A".charCodeAt(0);
+
+  const cipher = text
+    .toUpperCase()
+    .split("")
+    .map((char) => {
+      code = char.charCodeAt(0);
+
+      if (code < base || code > base + 26) {
+        return char;
+      }
+
+      let diff = code - base;
+      diff = diff + numShift;
+      diff = diff % 26;
+      const shiftedChar = String.fromCharCode(base + diff);
+      return shiftedChar;
+    })
+    .join("");
+
+  return res.status(201).send(`${cipher}`);
 });
