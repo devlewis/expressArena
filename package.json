@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "express-graphql": "^0.11.0",
+    "graphql": "^14.7.0",
     "morgan": "^1.9.1"
   },
   "devDependencies": {

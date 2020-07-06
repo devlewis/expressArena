@@ -1,16 +1,42 @@
 const express = require("express");
 const morgan = require("morgan");
+const expressgraphql = require("express-graphql").graphqlHTTP;
+var { buildSchema } = require("graphql");
 
-const app = express();
+// GraphQL schema
+var schema = buildSchema(`
+    type Query {
+        message: String
+    }
+`);
+// Root resolver
+var root = {
+  message: () => "Hello World!",
+};
+// Create an express server and a GraphQL endpoint
+var app = express();
+app.use(
+  "/graphql",
+  expressgraphql({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  })
+);
+app.listen(4000, () =>
+  console.log("Express GraphQL Server Now Running On localhost:4000/graphql")
+);
+
+// const app = express();
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
   res.send("Hello Express!");
 });
 
-app.listen(8000, () => {
-  console.log("Express server is listening on port 8000!");
-});
+// app.listen(8000, () => {
+//   console.log("Express server is listening on port 8000!");
+// });
 
 app.get("/burgers", (req, res) => {
   res.send("We have juicy cheese burgers!");
